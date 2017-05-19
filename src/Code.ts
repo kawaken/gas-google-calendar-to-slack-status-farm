@@ -3,6 +3,7 @@ let OAuth2: any;
 let SLACK_CLIENT_ID = '';
 let SLACK_CLIENT_SECRET = '';
 let SLACK_LOG_WEBHOOK_URL = '';
+let IGNORED_COLLEAGUE_EVENT_REGEX = /^$/;
 
 function doGet(e: any) {
   let slack = getSlackService();
@@ -108,6 +109,12 @@ function getCurrentStatusFromCalendarEvent(): SlackProfile {
     }
 
     let title = event.getTitle();
+    if (!event.isOwnedByMe()) {
+      if (IGNORED_COLLEAGUE_EVENT_REGEX.test(title)) {
+        continue;
+      }
+    }
+
     let emoji = ':spiral_calendar_pad:';
     if (/(:[^:]+:)/.test(title)) {
       emoji = RegExp.$1;

@@ -3,6 +3,7 @@ var OAuth2;
 var SLACK_CLIENT_ID = '';
 var SLACK_CLIENT_SECRET = '';
 var SLACK_LOG_WEBHOOK_URL = '';
+var IGNORED_COLLEAGUE_EVENT_REGEX = /^$/;
 function doGet(e) {
     var slack = getSlackService();
     var template = HtmlService.createTemplate('<!DOCTYPE html>' +
@@ -86,6 +87,11 @@ function getCurrentStatusFromCalendarEvent() {
             continue;
         }
         var title = event_1.getTitle();
+        if (!event_1.isOwnedByMe()) {
+            if (IGNORED_COLLEAGUE_EVENT_REGEX.test(title)) {
+                continue;
+            }
+        }
         var emoji = ':spiral_calendar_pad:';
         if (/(:[^:]+:)/.test(title)) {
             emoji = RegExp.$1;
