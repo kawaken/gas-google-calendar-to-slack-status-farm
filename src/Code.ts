@@ -108,6 +108,10 @@ function getCurrentStatusFromCalendarEvent(): SlackProfile {
       continue;
     }
 
+    if (event.getVisibility() == (CalendarApp.Visibility as any).PRIVATE) {
+      continue;
+    }
+
     let title = event.getTitle();
     if (!event.isOwnedByMe()) {
       if (IGNORED_COLLEAGUE_EVENT_REGEX.test(title)) {

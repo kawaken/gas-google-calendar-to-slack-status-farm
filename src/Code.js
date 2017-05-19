@@ -86,6 +86,9 @@ function getCurrentStatusFromCalendarEvent() {
         if (event_1.isAllDayEvent()) {
             continue;
         }
+        if (event_1.getVisibility() == CalendarApp.Visibility.PRIVATE) {
+            continue;
+        }
         var title = event_1.getTitle();
         if (!event_1.isOwnedByMe()) {
             if (IGNORED_COLLEAGUE_EVENT_REGEX.test(title)) {
